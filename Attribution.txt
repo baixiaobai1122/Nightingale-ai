@@ -1,0 +1,87 @@
+# Nightingale AI - Attribution and Licenses
+
+This medical AI voice assistant project uses the following open-source libraries and frameworks:
+
+## Frontend Dependencies (Next.js/React)
+- Next.js (MIT License) - React framework for production applications
+- React (MIT License) - JavaScript library for building user interfaces
+- TypeScript (Apache 2.0) - Typed superset of JavaScript
+- Tailwind CSS (MIT License) - Utility-first CSS framework
+- shadcn/ui (MIT License) - Re-usable components built with Radix UI and Tailwind CSS
+- Radix UI (MIT License) - Low-level UI primitives for React
+- Lucide React (ISC License) - Beautiful & consistent icon toolkit
+- Geist Font (SIL Open Font License) - Vercel's font family
+- @supabase/ssr (MIT License) - Supabase client for server-side rendering
+- @supabase/supabase-js (MIT License) - JavaScript client for Supabase
+
+## Backend Dependencies (Python/FastAPI)
+- FastAPI (MIT License) - Modern, fast web framework for building APIs
+- Uvicorn (BSD License) - Lightning-fast ASGI server implementation
+- SQLAlchemy (MIT License) - Python SQL toolkit and Object Relational Mapping
+- Pydantic (MIT License) - Data validation using Python type annotations
+- python-multipart (Apache 2.0) - Streaming multipart parser for Python
+- python-jose (MIT License) - JavaScript Object Signing and Encryption library
+- passlib (BSD-3-Clause License) - Comprehensive password hashing library
+- httpx (BSD License) - Fully featured HTTP client library for Python 3
+- pytest (MIT License) - Testing framework for Python
+
+## Database & Authentication
+- Supabase (Apache 2.0) - Open source Firebase alternative
+- PostgreSQL (PostgreSQL License) - Advanced open source relational database
+- Row Level Security (RLS) - Built-in PostgreSQL security feature
+
+## Development Tools
+- ESLint (MIT License) - JavaScript linting utility
+- Prettier (MIT License) - Code formatter
+- PostCSS (MIT License) - CSS transformation tool
+- Vercel (Commercial) - Deployment and hosting platform
+
+## AI & Machine Learning Libraries
+- OpenAI API (Commercial) - AI language model services
+- Transformers (Apache 2.0) - State-of-the-art ML models
+- NumPy (BSD License) - Fundamental package for scientific computing
+- SciPy (BSD License) - Scientific computing library
+
+## Medical Data & Content
+All synthetic medical data, test cases, and example content in this repository are:
+- Authored specifically for this demonstration project
+- Not based on real patient information or medical records
+- Generated using AI for testing and demonstration purposes only
+- Licensed under the same terms as this repository
+- Compliant with HIPAA and healthcare privacy regulations
+
+## Healthcare Compliance Notes
+- This software is designed with HIPAA compliance in mind
+- All PHI (Protected Health Information) is redacted before AI processing
+- Row Level Security ensures data isolation between users
+- Audit trails are maintained for all medical data access
+- Real patient data should never be used in development/testing
+
+## Usage and Liability
+- This software is provided for demonstration and educational purposes
+- Not intended for actual medical diagnosis or treatment without proper validation
+- All AI-generated medical content must be reviewed by qualified healthcare professionals
+- Users must ensure compliance with local healthcare regulations
+- No warranty is provided for medical accuracy or patient safety
+
+## License
+This project is licensed under the MIT License. See LICENSE file for complete terms.
+
+## Attribution Requirements
+When using this software:
+- Maintain this attribution file
+- Credit the original authors and contributors
+- Ensure compliance with all dependency licenses
+- Follow healthcare industry standards for medical software
+
+## Data Sources
+- Medical terminology: Public domain medical dictionaries
+- Test scenarios: Synthetic data generated for demonstration
+- UI patterns: Industry-standard healthcare application designs
+- Security practices: OWASP and healthcare security guidelines
+
+Last updated: Sep 2025
+
+---
+
+**Important**: This is demonstration software. Always consult qualified healthcare professionals for medical advice and ensure proper regulatory approval before using in clinical settings.
