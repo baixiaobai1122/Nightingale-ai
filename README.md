@@ -23,7 +23,6 @@ A comprehensive medical AI system featuring privacy-first voice consultations wi
 - **AI-Powered Summarization**: Generate both clinician and patient-friendly summaries
 - **Human-in-the-Loop Review**: Doctor approval workflow for patient summaries
 - **Patient Q&A System**: Search through approved medical records
-- **Markdown Rendering**: Properly formatted medical summaries with headings, lists, and emphasis
 
 ###  Privacy & Security Features
 - **PHI Redaction**: Automatic identification and redaction of Protected Health Information
