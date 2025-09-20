@@ -2,22 +2,22 @@
 
 A comprehensive medical AI system featuring privacy-first voice consultations with a **Next.js frontend** and **FastAPI backend** that demonstrates a **safe, provenance-grounded VoiceAI consultation workflow**.
 
-## 🏗️ Architecture
+##  Architecture
 
 - **Frontend**: Next.js 15 with TypeScript, Tailwind CSS v4, and shadcn/ui components
 - **Backend**: FastAPI with SQLAlchemy, JWT authentication, and privacy-focused AI processing  
 - **Database**: Supabase (PostgreSQL) with Row Level Security
 - **Authentication**: Supabase Auth with role-based access control
 
-## ✨ Key Features
+##  Key Features
 
-### 🔐 Authentication & Authorization
+###  Authentication & Authorization
 - **Supabase Authentication**: Email/password authentication with role-based access
 - **Role-Based Access Control**: Separate interfaces for patients and healthcare providers
 - **Dynamic User Profiles**: User profiles with role-specific features and dynamic doctor names
 - **Secure Session Management**: Automatic token refresh and validation
 
-### 🏥 Medical Workflow Management
+###  Medical Workflow Management
 - **Session Tracking**: Unique session identifiers with status management
 - **Voice Recording Integration**: Real-time audio capture and transcription
 - **AI-Powered Summarization**: Generate both clinician and patient-friendly summaries
@@ -25,7 +25,7 @@ A comprehensive medical AI system featuring privacy-first voice consultations wi
 - **Patient Q&A System**: Search through approved medical records
 - **Markdown Rendering**: Properly formatted medical summaries with headings, lists, and emphasis
 
-### 🛡️ Privacy & Security Features
+###  Privacy & Security Features
 - **PHI Redaction**: Automatic identification and redaction of Protected Health Information
 - **Row Level Security**: Database-level access control for all medical data
 - **Consent Management**: Explicit consent recording before AI processing
@@ -33,13 +33,13 @@ A comprehensive medical AI system featuring privacy-first voice consultations wi
 - **HIPAA Compliance**: Healthcare data protection standards implementation
 - **Data Encryption**: End-to-end encryption for all sensitive information
 
-### 🤖 AI & Machine Learning
+###  AI & Machine Learning
 - **Intelligent Summarization**: Context-aware medical summary generation
 - **Provenance Tracking**: Every AI-generated point links back to source conversation
 - **Quality Assurance**: Grounding validation for medical accuracy
 - **Dual Summary Types**: Technical summaries for clinicians, accessible summaries for patients
 
-## 🔌 API Endpoints
+##  API Endpoints
 
 ### Authentication Endpoints
 - `POST /api/auth/login` - User authentication with role-based redirection
@@ -61,7 +61,7 @@ A comprehensive medical AI system featuring privacy-first voice consultations wi
 ### Patient Services
 - `GET /api/patient/[patientId]/qa` - Search patient's approved medical records
 
-## 🔒 Security Implementation
+##  Security Implementation
 
 ### Database Security
 - **Row Level Security (RLS)**: Comprehensive policies for all tables
@@ -147,7 +147,7 @@ python scripts/start_backend.py
 Backend will be available at: http://127.0.0.1:8000
 API Documentation: http://127.0.0.1:8000/docs
 
-## 🔄 Complete Workflow
+##  Complete Workflow
 
 ### Pre-Care
 - **Authentication**: Secure Supabase Auth with email/password
@@ -167,10 +167,11 @@ API Documentation: http://127.0.0.1:8000/docs
 - **Human Review**: Doctors can review and approve summaries
 - **Patient Access**: Secure patient portal for accessing approved summaries
 
-## 🛠️ Development
+##  Development
+
 
 ### Project Structure
-\`\`\`
+```
 nightingale-ai/
 ├── app/                   # Next.js App Router pages
 │   ├── auth/             # Authentication pages (login, signup, callback)
@@ -202,9 +203,9 @@ nightingale-ai/
 │   ├── summarize.py    # AI summarization with dual outputs
 │   └── tests/          # Comprehensive test suite
 └── requirements.txt    # Python dependencies including AI libraries
-\`\`\`
+```
 
-## 🧪 Testing
+##  Testing
 
 ### Quality Assurance Tests
 
@@ -240,7 +241,7 @@ python -m pytest tests/ -v
 npm test
 \`\`\`
 
-## 📦 Deployment
+##  Deployment
 
 ### Vercel Deployment (Recommended)
 1. Connect your GitHub repository to Vercel
@@ -256,7 +257,7 @@ npm run build
 # Ensure all environment variables are configured
 \`\`\`
 
-## 🔧 Database Schema
+##  Database Schema
 
 ### Core Tables
 - **profiles**: User information with role-based access (patient/doctor)
@@ -284,7 +285,7 @@ See `Attribution.txt` for detailed licensing information.
 
 This project uses modern web technologies and follows healthcare industry best practices for privacy and security.
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -292,7 +293,7 @@ This project uses modern web technologies and follows healthcare industry best p
 4. Submit a pull request
 5. Ensure all tests pass
 
-## 📞 Support
+##  Support
 
 For questions or support:
 - Open an issue in the repository
