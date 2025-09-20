@@ -98,10 +98,10 @@ A comprehensive medical AI system featuring privacy-first voice consultations wi
 - Git
 
 ### 1. Clone and Setup
-\`\`\`bash
+```bash
 git clone <repository-url>
 cd nightingale-ai
-\`\`\`
+```
 
 ### 2. Database Setup
 1. Create a new Supabase project at https://supabase.com
@@ -111,28 +111,28 @@ cd nightingale-ai
 
 ### 3. Environment Configuration
 Set up your environment variables in Vercel or your deployment platform:
-\`\`\`env
+```env
 SUPABASE_URL=your-supabase-project-url
 SUPABASE_ANON_KEY=your-supabase-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL=http://localhost:3000
-\`\`\`
+```
 
 ### 4. Frontend Setup
-\`\`\`bash
+```bash
 # Install dependencies
 npm install
 
 # Start development server
 npm run dev
-\`\`\`
+```
 
 Frontend will be available at: http://localhost:3000
 
 ### 5. Backend Setup (Optional - for AI processing)
-\`\`\`bash
+```bash
 # Create Python virtual environment
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
@@ -142,7 +142,7 @@ pip install -r requirements.txt
 
 # Start FastAPI server
 python scripts/start_backend.py
-\`\`\`
+```
 
 Backend will be available at: http://127.0.0.1:8000
 API Documentation: http://127.0.0.1:8000/docs
@@ -232,14 +232,14 @@ The project includes comprehensive tests for medical AI safety:
 - Validates user-centric design choices
 
 ### Running Tests
-\`\`\`bash
+```bash
 # Backend tests
 cd backend
 python -m pytest tests/ -v
 
 # Frontend tests (if implemented)
 npm test
-\`\`\`
+```
 
 ##  Deployment
 
@@ -249,13 +249,13 @@ npm test
 3. Deploy automatically on push to main branch
 
 ### Manual Deployment
-\`\`\`bash
+```bash
 # Build the application
 npm run build
 
 # Deploy to your preferred platform
 # Ensure all environment variables are configured
-\`\`\`
+```
 
 ##  Database Schema
 
