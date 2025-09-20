@@ -30,7 +30,7 @@ This directory contains the four micro-tests that validate the quality and user-
 
 ## Running Tests
 
-\`\`\`bash
+```bash
 # Run all tests
 cd backend
 python -m pytest tests/ -v
@@ -43,7 +43,7 @@ python -m pytest tests/test_summary.py -v
 
 # Run with coverage
 python -m pytest tests/ --cov=backend --cov-report=html
-\`\`\`
+```
 
 ## Design Philosophy
 
@@ -53,7 +53,7 @@ These tests embody our commitment to:
 - **Privacy**: Zero-tolerance for PHI leaks
 - **Performance**: Real-time response requirements
 - **Traceability**: Every claim must be grounded in source material
-\`\`\`
+```
 
 ```typescriptreact file="app/layout.tsx" isDeleted="true"
 ...deleted...
