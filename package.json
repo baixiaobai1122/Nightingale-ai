@@ -1,7 +1,8 @@
 {
-  "name": "my-v0-project",
-  "version": "0.1.0",
+  "name": "nightingale-ai",
+  "version": "0.3.0",
   "private": true,
+  "description": "Privacy-first medical AI voice assistant with HIPAA compliance",
   "scripts": {
     "build": "next build",
     "dev": "next dev",

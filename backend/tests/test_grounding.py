@@ -1,36 +1,61 @@
-# test_grounding.py
 """
-Test to validate that every summary bullet has a source anchor [S#].
-This ensures traceability and grounding of all generated content.
+test_grounding.py
+-----------------
+Validation tests for summarization output.
+Ensures clinician and patient summaries include [S#] source anchors
+for every content bullet.
 """
+
+import re
+from datasets import load_dataset
 from backend.summarize import make_dual_summaries
 
-def test_every_bullet_has_anchor():
-    """Test that every line in both summaries contains source anchors."""
-    spans = [(1, "cough for 3 days"), (2, "no fever"), (3, "took panadol")]
-    clin, pat = make_dual_summaries(spans)
-    
-    clin_lines = [line.strip() for line in clin.split('\n') if line.strip() and not line.startswith('#')]
-    for line in clin_lines:
-        if line and '•' in line or line.startswith('-'):  # Only check bullet points
-            assert '[S' in line and ']' in line, f"Missing source anchor in clinician line: {line}"
-    
-    pat_lines = [line.strip() for line in pat.split('\n') if line.strip() and not line.startswith('#')]
-    for line in pat_lines:
-        if line and '•' in line or line.startswith('-'):  # Only check bullet points
-            assert '[S' in line and ']' in line, f"Missing source anchor in patient line: {line}"
 
-def test_anchor_format():
-    """Test that anchors follow the correct [S#] format."""
-    spans = [(1, "headache improved"), (2, "no allergies reported")]
+def load_real_medical_data(num_samples=2, split="train"):
+    """
+    Load dialogues from omi-health/medical-dialogue-to-soap-summary.
+    Returns: list of dialogues (each as str)
+    """
+    ds = load_dataset("omi-health/medical-dialogue-to-soap-summary", split=split)
+    n = min(num_samples, len(ds))
+    dialogues = [ds[i]["dialogue"] for i in range(n) if ds[i].get("dialogue")]
+    return dialogues
+
+
+def _check_anchors(summary: str, summary_name: str):
+    """Check that each bullet has a valid [S#] anchor."""
+    lines = [line.strip() for line in summary.split("\n") if line.strip()]
+    bullet_lines = [line for line in lines if line.startswith("•")]
+
+    if not bullet_lines:
+        raise AssertionError(f"{summary_name} has no bullet points")
+
+    for line in bullet_lines:
+        if "[S" not in line or "]" not in line:
+            raise AssertionError(f"Missing [S#] anchor in {summary_name}: {line}")
+        if not re.search(r"\[S\d+\]", line):
+            raise AssertionError(f"Invalid anchor format in {summary_name}: {line}")
+
+    print(f"✅ PASS: {summary_name} has {len(bullet_lines)} bullets, all with valid anchors.")
+
+
+def test_every_bullet_has_anchor():
+    """Validate clinician and patient summaries both contain [S#] anchors."""
+    print("\n=== GROUNDING TEST: Source Anchor Validation ===")
+
+    dialogues = load_real_medical_data(1)
+    dialogue = dialogues[0]
+
+    spans = [(i+1, line) for i, line in enumerate(dialogue.split("\n")) if line.strip()]
     clin, pat = make_dual_summaries(spans)
-    
-    import re
-    anchor_pattern = r'\[S\d+\]'
-    
-    # Check that anchors match the expected pattern
-    clin_anchors = re.findall(anchor_pattern, clin)
-    pat_anchors = re.findall(anchor_pattern, pat)
-    
-    assert len(clin_anchors) > 0, "No valid anchors found in clinician summary"
-    assert len(pat_anchors) > 0, "No valid anchors found in patient summary"
+
+    _check_anchors(clin, "Clinician summary")
+    _check_anchors(pat, "Patient summary")
+
+
+if __name__ == "__main__":
+    try:
+        test_every_bullet_has_anchor()
+        print(" All grounding tests passed successfully.")
+    except AssertionError as e:
+        print(f" Grounding test failed: {e}")

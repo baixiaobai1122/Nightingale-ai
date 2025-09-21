@@ -1,0 +1,37 @@
+# Medical Summarization Training Configuration
+
+# Model Configuration
+model_name: "t5-base"
+max_source_length: 512
+max_target_length: 256
+freeze_encoder: false
+
+# Training Configuration
+batch_size: 8
+learning_rate: 5e-5
+num_epochs: 15
+warmup_steps: 1000
+max_grad_norm: 1.0
+mixed_precision: true
+
+# Loss Weights
+clinician_weight: 0.6
+patient_weight: 0.4
+
+# Data Configuration
+data_cache_dir: "./data/cache"
+num_workers: 4
+
+# Logging and Checkpointing
+log_every: 100
+save_every: 1000
+eval_every: 500
+output_dir: "./outputs"
+experiment_name: "medical_summarizer_v1"
+
+# Weights & Biases
+use_wandb: true
+wandb_project: "medical-summarization"
+
+# Hardware
+device: "auto"

@@ -5,9 +5,12 @@ A comprehensive medical AI system featuring privacy-first voice consultations wi
 ##  Architecture
 
 - **Frontend**: Next.js 15 with TypeScript, Tailwind CSS v4, and shadcn/ui components
-- **Backend**: FastAPI with SQLAlchemy, JWT authentication, and privacy-focused AI processing  
+- **Backend**: Hybrid architecture - Next.js API Routes + FastAPI backend (port 8000)
 - **Database**: Supabase (PostgreSQL) with Row Level Security
 - **Authentication**: Supabase Auth with role-based access control
+- **AI Models**: External `omi-health/sum-small` model + local training infrastructure
+
+*Note: Architecture alignment between frontend and backend is in progress.*
 
 ##  Key Features
 
@@ -40,53 +43,24 @@ A comprehensive medical AI system featuring privacy-first voice consultations wi
 
 ##  API Endpoints
 
-### Authentication Endpoints
-- `POST /api/auth/login` - User authentication with role-based redirection
-- `POST /api/auth/signup` - User registration with role selection
+*Note: APIs are split between Next.js routes (frontend) and FastAPI backend*
 
-### Session Management
-- `POST /api/session/start` - Initialize new medical consultation session
-- `GET /api/session/[id]/summary` - Retrieve session summary with markdown rendering
+### Frontend API Routes (Next.js)
+- `POST /api/session/start` - Initialize session (Supabase integration)
+- `POST /api/summarize/[sessionId]` - Generate summaries (currently mock data)
 
-### Medical Data Processing
-- `POST /api/asr/ingest` - Ingest automatic speech recognition segments
-- `POST /api/summarize/[sessionId]` - Generate AI-powered medical summaries
-- `GET /api/summary/[summaryId]` - Retrieve specific medical summary
+### Backend-Proxied API Routes (FastAPI via Next.js)
+- `POST /api/asr/ingest` - Ingest speech recognition segments
+- `POST /api/consent/record` - Record patient consent with PHI redaction
+- `POST /api/review/[summaryId]/approve` - Doctor approval workflow
+- `GET /api/summary/[summaryId]` - Retrieve medical summary
+- `GET /api/patient/[patientId]/qa` - Search approved medical records
 
-### Review & Approval Workflow
-- `POST /api/review/[summaryId]/approve` - Doctor approval of patient summaries
-- `POST /api/consent/record` - Record patient consent for AI processing
-
-### Patient Services
-- `GET /api/patient/[patientId]/qa` - Search patient's approved medical records
-
-##  Security Implementation
-
-### Database Security
-- **Row Level Security (RLS)**: Comprehensive policies for all tables
-  - Users can only access their own profiles
-  - Patients and assigned doctors can access session data
-  - Cross-table relationship validation
-- **Secure Relationships**: Foreign key constraints with cascade policies
-- **Audit Logging**: Automatic tracking of all data modifications
-
-### Authentication Security
-- **Supabase Auth Integration**: Secure authentication with automatic profile creation
-- **Role Validation**: Server-side role verification for all protected routes
-- **Session Security**: Automatic token refresh and cleanup
-- **Dynamic User Display**: Real-time fetching of user information for personalized interfaces
-
-### API Security
-- **Bearer Token Authentication**: Supabase JWT token validation
-- **Input Validation**: Comprehensive request validation and sanitization
-- **Error Handling**: Secure error responses without information leakage
-- **CORS Configuration**: Proper cross-origin resource sharing setup
-
-### Privacy Protection
-- **PHI Detection**: Automatic identification of sensitive medical information
-- **Data Redaction**: Real-time redaction before AI processing
-- **Consent Tracking**: Explicit consent management with version control
-- **Access Logging**: Complete audit trail for compliance
+### Direct FastAPI Endpoints (port 8000)
+- `POST /auth/signup` - User registration
+- `POST /auth/login` - Authentication with JWT
+- `POST /summarize/{session_id}` - AI-powered summarization
+- Authentication required for all medical data endpoints
 
 ## 🚀 Quick Start
 
@@ -104,19 +78,27 @@ cd nightingale-ai
 
 ### 2. Database Setup
 1. Create a new Supabase project at https://supabase.com
-2. Run the SQL scripts in the `scripts/` folder to set up tables:
+2. Run the SQL scripts in the root folder to set up tables:
    - `001_create_tables.sql` - Creates profiles, sessions, segments, and summaries tables with RLS
    - `002_profile_trigger.sql` - Auto-creates profiles on user registration
 
 ### 3. Environment Configuration
-Set up your environment variables in Vercel or your deployment platform:
+Copy `.env.example` to `.env.local` and configure your environment variables:
+```bash
+cp .env.example .env.local
+```
+
+Update the following variables:
 ```env
-SUPABASE_URL=your-supabase-project-url
-SUPABASE_ANON_KEY=your-supabase-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+# Frontend (required)
 NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# Backend (for AI processing)
+DB_ENCRYPTION_KEY=your-encryption-key-here
+SECRET_KEY=your-secret-key-here
+MASTER_PASSWORD=your-master-password-here
 ```
 
 ### 4. Frontend Setup
@@ -140,31 +122,11 @@ source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
 # Start FastAPI server
-python scripts/start_backend.py
+python scripts/start_secure_backend.py
 ```
 
 Backend will be available at: http://127.0.0.1:8000
 API Documentation: http://127.0.0.1:8000/docs
-
-##  Complete Workflow
-
-### Pre-Care
-- **Authentication**: Secure Supabase Auth with email/password
-- **Role Selection**: Separate registration for patients and healthcare providers
-- **Consent Management**: Explicit consent recording before any AI processing
-- **Profile Management**: User profiles with role-based access control
-
-### During Care
-- **Voice Recording**: Real-time audio capture and transcription
-- **Privacy Protection**: Automatic PHI redaction before AI processing
-- **Session Management**: Secure session tracking with unique identifiers
-- **Real-time Processing**: Live conversation analysis and note-taking
-
-### Post-Care
-- **AI Summarization**: Generate both clinician and patient-friendly summaries
-- **Provenance Tracking**: Every summary point links back to original conversation
-- **Human Review**: Doctors can review and approve summaries
-- **Patient Access**: Secure patient portal for accessing approved summaries
 
 ##  Development
 
@@ -190,10 +152,11 @@ nightingale-ai/
 │   ├── auth.ts          # Authentication utilities
 │   └── utils.ts         # Utility functions
 ├── hooks/               # Custom React hooks
-├── scripts/             # Database scripts and utilities
-│   ├── 001_create_tables.sql    # Database schema with RLS policies
-│   ├── 002_profile_trigger.sql  # Auto-profile creation trigger
-│   └── start_backend.py         # Backend startup script
+├── scripts/             # Backend utilities
+│   └── start_secure_backend.py  # Secure backend startup script
+├── summary_training/    # Local AI model training infrastructure
+├── 001_create_tables.sql       # Database schema with RLS policies
+├── 002_profile_trigger.sql     # Auto-profile creation trigger
 ├── backend/             # FastAPI Backend
 │   ├── app.py          # FastAPI main application with all endpoints
 │   ├── models.py       # SQLAlchemy database models
@@ -204,31 +167,6 @@ nightingale-ai/
 └── requirements.txt    # Python dependencies including AI libraries
 ```
 
-##  Testing
-
-### Quality Assurance Tests
-
-The project includes comprehensive tests for medical AI safety:
-
-#### 1. Grounding Validation
-- Ensures every summary point has source attribution
-- Validates traceability of AI-generated content
-- Critical for medical accuracy and accountability
-
-#### 2. Privacy Protection
-- Tests PHI redaction on synthetic medical data
-- Validates HIPAA compliance measures
-- Ensures no sensitive information leaks
-
-#### 3. Performance Profiling
-- Monitors system latency and response times
-- Tests scalability with varying loads
-- Ensures real-time performance requirements
-
-#### 4. Summary Quality
-- Compares clinician vs patient summary formats
-- Tests appropriate medical terminology usage
-- Validates user-centric design choices
 
 ### Running Tests
 ```bash

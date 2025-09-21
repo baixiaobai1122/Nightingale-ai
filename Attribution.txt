@@ -37,10 +37,18 @@ This medical AI voice assistant project uses the following open-source libraries
 - Vercel (Commercial) - Deployment and hosting platform
 
 ## AI & Machine Learning Libraries
-- OpenAI API (Commercial) - AI language model services
-- Transformers (Apache 2.0) - State-of-the-art ML models
+- Transformers (Apache 2.0) - Hugging Face transformers library
+- PyTorch (BSD License) - Deep learning framework
+- Tokenizers (Apache 2.0) - Fast tokenizers for transformers
+- Datasets (Apache 2.0) - Hugging Face datasets library
 - NumPy (BSD License) - Fundamental package for scientific computing
-- SciPy (BSD License) - Scientific computing library
+- Pandas (BSD License) - Data manipulation and analysis library
+- Scikit-learn (BSD License) - Machine learning library
+- OpenAI API (Commercial) - AI language model services
+
+## Medical AI Models
+- omi-health/sum-small - Medical dialogue summarization model (Phi-3-mini based)
+- medical-dialogue-to-soap-summary dataset - Training data from Hugging Face
 
 ## Medical Data & Content
 All synthetic medical data, test cases, and example content in this repository are:
