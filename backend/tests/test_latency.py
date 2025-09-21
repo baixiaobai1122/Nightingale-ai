@@ -9,6 +9,7 @@ import time
 import statistics
 from datasets import load_dataset
 from backend.summarize import make_dual_summaries
+import argparse
 
 
 def load_real_medical_data(num_samples=5, split="train"):
@@ -22,19 +23,31 @@ def load_real_medical_data(num_samples=5, split="train"):
     return dialogues
 
 
+# def profile_once(dialogue: str) -> float:
+#     """
+#     Run one profiling iteration on a dialogue.
+#     Returns: latency in ms
+#     """
+#     t0 = time.perf_counter()
+#     clin, pat = make_dual_summaries(dialogue)
+#     t1 = time.perf_counter()
+
+#     assert len(clin) > 0, "Empty clinician summary"
+#     assert len(pat) > 0, "Empty patient summary"
+
+#     return (t1 - t0) * 1000.0
 def profile_once(dialogue: str) -> float:
-    """
-    Run one profiling iteration on a dialogue.
-    Returns: latency in ms
-    """
+    """Run one profiling iteration on a dialogue. Returns: latency in ms"""
+    spans = [(i + 1, turn) for i, turn in enumerate(dialogue.split("\n")) if turn.strip()]
+
     t0 = time.perf_counter()
-    clin, pat = make_dual_summaries(dialogue)
+    clin, pat = make_dual_summaries(spans)
     t1 = time.perf_counter()
 
     assert len(clin) > 0, "Empty clinician summary"
     assert len(pat) > 0, "Empty patient summary"
-
     return (t1 - t0) * 1000.0
+
 
 
 def test_performance_benchmarks(num_samples=10):
@@ -63,3 +76,23 @@ def test_scalability():
         truncated = dialogues[0][:size]
         latency = profile_once(truncated)
         print(f"Dialogue length {size} chars → {latency:.2f}ms")
+
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Latency profiling for medical summarizer")
+    parser.add_argument("--samples", type=int, default=1, help="Number of dialogues to profile")
+    parser.add_argument("--split", type=str, default="train", help="HF split: train/validation/test")
+    parser.add_argument("--mode", type=str, choices=["bench", "scale", "both"], default="both",
+                        help="Run benchmarks, scalability, or both")
+    args = parser.parse_args()
+
+    # allow changing split for loader
+    def _loader(num):
+        return load_real_medical_data(num_samples=num, split=args.split)
+
+    # monkey patch loader inside test functions if needed
+    if args.mode in ("bench", "both"):
+        test_performance_benchmarks(args.samples)
+    if args.mode in ("scale", "both"):
+        test_scalability()
